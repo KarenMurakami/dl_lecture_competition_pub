@@ -32,6 +32,7 @@ bert_model = BertModel.from_pretrained('bert-base-uncased')
 bert_size = 768
 
 from torch import Tensor
+#分散表現のサンプル
 sample_text = "I am Karen. I am graduate yudkajeow"
 sample_tokens = tokenizer(sample_text, return_tensors='pt')
 print(sample_tokens)
@@ -44,15 +45,15 @@ result = tokenizer.decode(Tensor([[ 101, 1045, 2572, 8129, 1012, 1045, 2572, 461
          5004,  102]])[0], skip_special_tokens=True)
 print(result)
 
-from google.colab import drive
-drive.mount('/content/drive')
+#from google.colab import drive
+#drive.mount('/content/drive')
 
 torch.backends.cudnn.benchmark = True
 
 import os
 import shutil
 from concurrent.futures import ThreadPoolExecutor
-src_dir = "/content/drive/MyDrive/Colab Notebooks/DLBasics2023_colab/VQA/data"
+'''src_dir = "/content/drive/MyDrive/Colab Notebooks/DLBasics2023_colab/VQA/data"
 dst_dir = '/content/data'
 os.makedirs(dst_dir, exist_ok=True)
 files_to_copy = []
@@ -80,7 +81,7 @@ missing_files = [src for src, dst in files_to_copy if dst not in copied_files]
 if missing_files:
   print(f"missing: {missing_files}")
 else:
-  print("success")
+  print("success")'''
 
 def set_seed(seed):
     random.seed(seed)
@@ -405,11 +406,11 @@ class VQAModel(nn.Module):
         return x
 
 model = VQAModel(vocab_size=bert_size, n_answer=500)
- s_image = Tensor(np.random.uniform(size=(1, 3, 224, 224)))
- print(s_image.shape)
- s_question = Tensor(np.random.uniform(size=(1, 768)))
- s_pred = model(s_image, s_question)
- print(s_pred.shape)
+s_image = Tensor(np.random.uniform(size=(1, 3, 224, 224)))
+print(s_image.shape)
+s_question = Tensor(np.random.uniform(size=(1, 768)))
+s_pred = model(s_image, s_question)
+print(s_pred.shape)
 
 
 
@@ -424,8 +425,8 @@ transform = transforms.Compose([
     transforms.ToTensor()
 ])
 
-train_dataset = VQADataset(df_path="/content/data/train.json", image_dir="/content/data/train/train",dict_path="/content/data/class_mapping.csv", transform=transform)
-test_dataset = VQADataset(df_path="/content/data/valid.json", image_dir="/content/data/valid", transform=transform, answer=False)
+train_dataset = VQADataset(df_path="/workspace/assets/train.json", image_dir="/workspace/assets/train2",dict_path="/workspace/assets/class_mapping.csv", transform=transform)
+test_dataset = VQADataset(df_path="/workspace/assets/valid.json", image_dir="/workspace/assets/valid", transform=transform, answer=False)
 test_dataset.update_dict(train_dataset)
 
 train_loader = torch.utils.data.DataLoader(train_dataset, batch_size=128, shuffle=True, num_workers=2, pin_memory=True)
