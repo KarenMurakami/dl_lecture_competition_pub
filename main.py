@@ -436,7 +436,7 @@ model = VQAModel(vocab_size=bert_size, n_answer=len(train_dataset.answer2idx)).t
 
 # optimizer / criterion
 
-num_epoch = 5
+num_epoch = 1
 criterion = nn.CrossEntropyLoss()
 optimizer = torch.optim.Adam(model.parameters(), lr=0.0001, weight_decay=1e-5)
 
